@@ -1,9 +1,11 @@
 const express = require("express");
+var bodyParser = require("body-parser"); //allow express to read body 
 //database
 const database = require("./database");
 
 
 const booky = express();
+booky.use(bodyParser.urlencoded({extended: true}));
 
 /*
 Route                       /
@@ -140,6 +142,50 @@ Methods                    Get
 booky.get("/publications",(req,res) => {
     return res.json({publications: database.publication})
 });
+
+//post
+/*
+Route                       /book/new
+Description                add new book
+Access                     PUBLIC
+Parameter                  none
+Methods                    post
+
+ */
+booky.post("/book/new",(req,res) => {
+    const newBook = req.body;
+    database.books.push(newBook);
+    return res.json({updatedBooks: database.books});
+});
+/*
+Route                       /authors/new
+Description                add new authors
+Access                     PUBLIC
+Parameter                  none
+Methods                    post
+
+ */
+booky.post("/authors/new",(req,res) => {
+    const newAuthor = req.body;
+    database.author.push(newAuthor);
+    return res.json({updatedAuthor: database.author});
+});
+
+/*
+Route                       /publications/new
+Description                add new publications
+Access                     PUBLIC
+Parameter                  none
+Methods                    post
+
+ */
+booky.post("/publications/new",(req,res) => {
+    const newPublication = req.body;
+    database.publication.push(newPublication);
+    return res.json(database.publication);
+});
+
+
 booky.listen(3000,() => {
     console.log("Server is running");
 });
